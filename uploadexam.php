@@ -295,9 +295,9 @@ if (isset($_POST['submit'])) {
         margin-top: 20px;
     }
 </style>
-
 <script type="text/javascript">
     var remainingTime = <?php echo $remainingTime; ?>;
+    var alertTime = 300; // 5 minutes in seconds
 
     function updateTimer() {
         var minutes = Math.floor(remainingTime / 60);
@@ -307,7 +307,11 @@ if (isset($_POST['submit'])) {
 
         if (remainingTime > 0) {
             remainingTime--;
-            setTimeout(updateTimer, 1000); // Update every 1 second
+
+            // Check if remaining time is equal to alert time (5 minutes)
+            if (remainingTime === alertTime) {
+                alert('You have 5 minutes remaining!');
+            }
         } else {
             // Time is up, you can redirect or handle it as needed
             console.log('Time is up!'); 
@@ -316,7 +320,13 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    updateTimer();
+    // Update the timer every 1 second
+    var timerInterval = setInterval(updateTimer, 1000);
+
+    // Stop the interval when the remaining time reaches 0
+    if (remainingTime === 0) {
+        clearInterval(timerInterval);
+    }
 </script>
 
 
