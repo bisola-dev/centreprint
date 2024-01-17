@@ -310,7 +310,7 @@ if (isset($_POST['submit'])) {
 
             // Check if remaining time is equal to alert time (5 minutes)
             if (remainingTime === alertTime) {
-                alert('You have 5 minutes remaining!');
+                alert('You have 5 minutes remaining!,please ensure you upload your files');
             }
         } else {
             // Time is up, you can redirect or handle it as needed
