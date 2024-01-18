@@ -20,6 +20,9 @@ while ($row = mysqli_fetch_assoc($squat)) {
 
     $remainingTime = strtotime($endtime) - strtotime($joyce);
 
+ //echo $starttime.'  '. $endtime.'  '.$joyce.'  '.$remainingTime;
+
+
     if ($dateform != $proposeddate) {
         $reportalert = "This exam is not scheduled for today";
         echo "<script type ='text/javascript'>
@@ -38,7 +41,7 @@ while ($row = mysqli_fetch_assoc($squat)) {
                 alert('You can no longer attempt this exam. This exam has already ended.');
                 window.location.href='index.php';
             </script>";
-    } elseif ($remainingTime <= 600 && $remainingTime > 0) {
+    } elseif ($remainingTime <= 900 && $remainingTime > 0) {
         // Less than or equal to 10 minutes remaining
         $minutesLeft = ceil($remainingTime / 60); // Round up to the nearest minute
 
@@ -46,6 +49,9 @@ while ($row = mysqli_fetch_assoc($squat)) {
  
     }
 }
+
+
+
 ?>
 
        

@@ -13,9 +13,9 @@ if (isset($_POST['submit'])) {
     $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
 
     if (isset($_POST["submit"]) && !empty($_FILES["filelink"]["name"])) {
-        if ($_FILES["filelink"]["size"] > 50000) {
+        if ($_FILES["filelink"]["size"] > 90000) {
             echo "<script type='text/javascript'>
-                alert('Sorry, your file is too large, it should be less than 50MB.');
+                alert('Sorry, your file is too large, it should be less than 90kb.');
          
                 </script>";
         } else {
@@ -225,7 +225,8 @@ if (isset($_POST['submit'])) {
                                  <tbody>
 
             <?php 
-            $bisola = mysqli_query($conn, "SELECT * FROM euploads where fulln='$sefullnn'");                          $count = 1;
+            $bisola = mysqli_query($conn, "SELECT * FROM euploads where fulln='$sefullnn'");                         
+             $count = 1;
                                     while ($row = mysqli_fetch_assoc($bisola)) {
                                        $id = $row['id'];
                                        $dreg = $row['dreg'];
@@ -296,37 +297,36 @@ if (isset($_POST['submit'])) {
     }
 </style>
 <script type="text/javascript">
-    var remainingTime = <?php echo $remainingTime; ?>;
-    var alertTime = 300; // 5 minutes in seconds
+ var remainingTime = <?php echo $remainingTime; ?>;
+var alertTime = 900; // 15 minutes in seconds
 
-    function updateTimer() {
-        var minutes = Math.floor(remainingTime / 60);
-        var seconds = remainingTime % 60;
-        var timerElement = document.getElementById('countdown-timer');
-        timerElement.innerHTML = 'Remaining Time: ' + minutes + 'm ' + seconds + 's';
+function updateTimer() {
+    var minutes = Math.floor(remainingTime / 60);
+    var seconds = remainingTime % 60;
+    var timerElement = document.getElementById('countdown-timer');
+    timerElement.innerHTML = 'Remaining Time: ' + minutes + 'm ' + seconds + 's';
 
-        if (remainingTime > 0) {
-            remainingTime--;
+    if (remainingTime > 0) {
+        remainingTime--;
 
-            // Check if remaining time is equal to alert time (5 minutes)
-            if (remainingTime === alertTime) {
-                alert('You have 5 minutes remaining!,please ensure you upload your files');
-            }
-        } else {
-            // Time is up, you can redirect or handle it as needed
-            console.log('Time is up!'); 
-            alert('Time is up!');
-            window.location.href = 'index.php';
+        // Check if remaining time is equal to alert time (5 minutes)
+        if (remainingTime === alertTime) {
+            alert('You have 15 minutes remaining! Please ensure you upload your files');
         }
-    }
+    } else {
+        // Time is up, you can redirect or handle it as needed
+        console.log('Time is up!'); 
+        alert('Time is up!');
+        window.location.href = 'index.php';
 
-    // Update the timer every 1 second
-    var timerInterval = setInterval(updateTimer, 1000);
-
-    // Stop the interval when the remaining time reaches 0
-    if (remainingTime === 0) {
+        // Clear the interval when remaining time reaches 0
         clearInterval(timerInterval);
     }
+}
+
+// Update the timer every 1 second
+var timerInterval = setInterval(updateTimer, 1000);
+
 </script>
 
 
