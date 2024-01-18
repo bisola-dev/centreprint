@@ -42,7 +42,7 @@ while ($row = mysqli_fetch_assoc($squat)) {
                 window.location.href='index.php';
             </script>";
     } elseif ($remainingTime <= 900 && $remainingTime > 0) {
-        // Less than or equal to 10 minutes remaining
+        // Less than or equal to 15 minutes remaining
         $minutesLeft = ceil($remainingTime / 60); // Round up to the nearest minute
 
    
