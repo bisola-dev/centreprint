@@ -42,7 +42,7 @@ if (isset($_POST['reg'])){
    $starttime=trim(strip_tags($_POST['starttime']));
    $endtime=trim(strip_tags($_POST['endtime']));
 
-   echo $dept.''.$clazz.''.$ccode.''.$ctitl.''.$exdate.''.$starttime.''.$endtime;
+   //echo $dept.''.$clazz.''.$ccode.''.$ctitl.''.$exdate.''.$starttime.''.$endtime;
 
 $query2 = mysqli_query($conn, "SELECT * FROM courses WHERE ccode ='$ccode'|| sessn='sessn'");
 $num_rows = mysqli_num_rows($query2);
