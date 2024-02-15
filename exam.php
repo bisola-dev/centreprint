@@ -48,10 +48,8 @@ $query2 = mysqli_query($conn, "SELECT * FROM courses WHERE ccode ='$ccode'|| ses
 $num_rows = mysqli_num_rows($query2);
 
   if($dept == "" ||$clazz == "" ||$ccode== "" ||$ctitl == "" ||$sessn == "" ||$seme == ""||$exdate==""||$starttime==""||$endtime=="") {
-  $mes="<script type ='text/javascript'>alert('please do not submit empty form.')</script>";
-      $ms="do not submit an empty form 
-      ";
-
+   echo "<script type ='text/javascript'>alert('please do not submit empty form.')</script>";
+  
  }
 
 
@@ -71,7 +69,7 @@ echo $session_error = "<script type ='text/javascript'>
 
 
 if (mysqli_query($conn, $new22)) {
- echo $mes="<script type='text/javascript'>
+ echo"<script type='text/javascript'>
         alert('Courses successfully saved');
         window.location.href='exam.php';
         </script>";}

@@ -204,16 +204,32 @@ $bissy = mysqli_query($conn, "SELECT * FROM euploads where courseid ='$ccode2' O
     // Get table data
     var table = document.getElementById('dataTableExample1');
 
+    // Check if the table exists
+    if (!table) {
+        alert("Table not found.");
+        return;
+    }
+
+    // Check if the table has any rows (excluding the header row)
+    var rowCount = table.rows.length;
+    var headerRowCount = table.tHead.rows.length;
+    var dataRowCount = rowCount - headerRowCount;
+
+    if (dataRowCount === 0) {
+        alert("Table is empty. Nothing to download.");
+        return;
+    }
+
+    // Proceed with generating the Excel file
     // Specify the column indices you want to include
     var includedColumns = [0, 1, 2, 3, 4]; // Adjust the column indices as needed
 
     // Create a sheet with only the specified columns
     var sheetData = [];
-    var rows = table.rows;
-    for (var i = 0; i < rows.length; i++) {
+    for (var i = headerRowCount; i < rowCount; i++) {
         var rowData = [];
         for (var j = 0; j < includedColumns.length; j++) {
-            rowData.push(rows[i].cells[includedColumns[j]].innerText);
+            rowData.push(table.rows[i].cells[includedColumns[j]].innerText);
         }
         sheetData.push(rowData);
     }

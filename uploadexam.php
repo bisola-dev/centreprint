@@ -29,7 +29,7 @@ if (isset($_POST['submit'])) {
 
                     echo "<script type='text/javascript'>
                             alert('Submission successful');
-                            window.location.href='subsuccess.php';
+                            window.location.href='subsuccess.php?remainingTime=$remainingTime';
                         </script>";
                 }
             }
@@ -223,7 +223,6 @@ if (isset($_POST['submit'])) {
                                     </tr>
                                  </thead>
                                  <tbody>
-
             <?php 
             $bisola = mysqli_query($conn, "SELECT * FROM euploads where fulln='$sefullnn'");                         
              $count = 1;
@@ -297,37 +296,45 @@ if (isset($_POST['submit'])) {
     }
 </style>
 <script type="text/javascript">
- var remainingTime = <?php echo $remainingTime; ?>;
-var alertTime = 900; // 15 minutes in seconds
+   // Retrieve remaining time from PHP session
+   var remainingTime = <?php echo json_encode($_SESSION['remainingTime'] ?? 0); ?>;
+   // Define alert time in seconds (15 minutes)
+   var alertTime = 900; 
+   // Define the updateTimer function
+   function updateTimer() {
+       // Calculate hours, minutes, and seconds
+       var hours = Math.floor(remainingTime / 3600);
+       var minutes = Math.floor((remainingTime % 3600) / 60);
+       var seconds = remainingTime % 60;
+       
+       // Get timer element by ID
+       var timerElement = document.getElementById('countdown-timer');
+       
+       // Update timer display
+       timerElement.innerHTML = 'Remaining Time: ' + hours + 'h ' + minutes + 'm ' + seconds + 's';
 
-function updateTimer() {
-    var minutes = Math.floor(remainingTime / 60);
-    var seconds = remainingTime % 60;
-    var timerElement = document.getElementById('countdown-timer');
-    timerElement.innerHTML = 'Remaining Time: ' + minutes + 'm ' + seconds + 's';
+       // Check if remaining time is greater than 0
+       if (remainingTime > 0) {
+           remainingTime--; // Decrement remaining time
+           setTimeout(updateTimer, 1000); // Call updateTimer again after 1 second
 
-    if (remainingTime > 0) {
-        remainingTime--;
+           // Check if remaining time is equal to alert time
+           if (remainingTime === alertTime) {
+               // Show alert message
+               alert('You have 15 minutes remaining! Please ensure you upload your files');
+           }
+       } else {
+           // Time is up, redirect to specified URL
+           console.log('Time is up!');
+           alert('Time is up!');
+           window.location.href = 'index.php';
+       }
+   }
 
-        // Check if remaining time is equal to alert time (5 minutes)
-        if (remainingTime === alertTime) {
-            alert('You have 15 minutes remaining! Please ensure you upload your files');
-        }
-    } else {
-        // Time is up, you can redirect or handle it as needed
-        console.log('Time is up!'); 
-        alert('Time is up!');
-        window.location.href = 'index.php';
-
-        // Clear the interval when remaining time reaches 0
-        clearInterval(timerInterval);
-    }
-}
-
-// Update the timer every 1 second
-var timerInterval = setInterval(updateTimer, 1000);
-
+   // Call updateTimer to start the countdown
+   updateTimer();
 </script>
+
 
 
 

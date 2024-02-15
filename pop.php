@@ -10,6 +10,7 @@ $seclazz = $_SESSION['clazz'];
 
 $squat = mysqli_query($conn, "SELECT * FROM courses WHERE ccode ='$seexam'");
 while ($row = mysqli_fetch_assoc($squat)) {
+    $id =$row['id'];
     $clazz = $row['clazz'];
     $dept = $row['dept'];
     $sessny = $row['sessn'];
@@ -18,10 +19,14 @@ while ($row = mysqli_fetch_assoc($squat)) {
     $endtime = $row['endtime'];
     $proposeddate = $row['proposeddate'];
 
-    $remainingTime = strtotime($endtime) - strtotime($joyce);
+    $endTimeTimestamp = strtotime($endtime);
+   $startTimeTimestamp = strtotime($starttime);
+   $currentTimestamp = strtotime($joyce);
+
+ $remainingTime = $endTimeTimestamp - $currentTimestamp;
 
  //echo $starttime.'  '. $endtime.'  '.$joyce.'  '.$remainingTime;
-
+ $_SESSION['remainingTime'] = $remainingTime;
 
     if ($dateform != $proposeddate) {
         $reportalert = "This exam is not scheduled for today";

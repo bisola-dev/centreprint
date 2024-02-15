@@ -1,14 +1,5 @@
 <?php 
-
 require_once("conn.php");
-
-$sematric = $_SESSION['matricno'];
-$sefullnn = $_SESSION['fulln'];
-$seexam = $_SESSION['exam'];
-$seclazz = $_SESSION['clazz'];
-
-
-
 if (isset($_POST['reg'])){
     $lame = mysqli_escape_string($conn,trim(strip_tags($_POST['lame'])));       
 }
@@ -218,8 +209,7 @@ $queryx = mysqli_query($conn, "SELECT * FROM  euploads WHERE fulln LIKE '%$lame%
                                           }
         
                                          ?>
-                            
-                                                      
+                                  
                             <button type="button" class="btn btn-<?php echo $bcolour; ?>"><?php echo $button; ?></button></th>
                                     </tr>
                                    <?php $count++;} ?>
