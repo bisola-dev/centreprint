@@ -1,7 +1,12 @@
-<?php 
+<?php
 
 require_once("conn.php");
 
+// Check if the start time is already stored in session
+if (!isset($_SESSION['startTime'])) {
+    // If not, store the current time as the start time
+    $_SESSION['startTime'] = time();
+}
 
 $sematric = $_SESSION['matricno'];
 $sefullnn = $_SESSION['fulln'];
@@ -10,7 +15,7 @@ $seclazz = $_SESSION['clazz'];
 
 $squat = mysqli_query($conn, "SELECT * FROM courses WHERE ccode ='$seexam'");
 while ($row = mysqli_fetch_assoc($squat)) {
-    $id =$row['id'];
+    $id = $row['id'];
     $clazz = $row['clazz'];
     $dept = $row['dept'];
     $sessny = $row['sessn'];
@@ -20,13 +25,12 @@ while ($row = mysqli_fetch_assoc($squat)) {
     $proposeddate = $row['proposeddate'];
 
     $endTimeTimestamp = strtotime($endtime);
-   $startTimeTimestamp = strtotime($starttime);
-   $currentTimestamp = strtotime($joyce);
+    $startTimeTimestamp = $_SESSION['startTime']; // Use the stored start time
+    $currentTimestamp = time(); // Get the current time
 
- $remainingTime = $endTimeTimestamp - $currentTimestamp;
+    $remainingTime = $endTimeTimestamp - $currentTimestamp;
 
- //echo $starttime.'  '. $endtime.'  '.$joyce.'  '.$remainingTime;
- $_SESSION['remainingTime'] = $remainingTime;
+    $_SESSION['remainingTime'] = $remainingTime;
 
     if ($dateform != $proposeddate) {
         $reportalert = "This exam is not scheduled for today";
@@ -49,14 +53,7 @@ while ($row = mysqli_fetch_assoc($squat)) {
     } elseif ($remainingTime <= 900 && $remainingTime > 0) {
         // Less than or equal to 15 minutes remaining
         $minutesLeft = ceil($remainingTime / 60); // Round up to the nearest minute
-
-   
- 
     }
 }
 
-
-
 ?>
-
-       

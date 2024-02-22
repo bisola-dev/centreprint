@@ -29,7 +29,7 @@ if (isset($_POST['submit'])) {
 
                     echo "<script type='text/javascript'>
                             alert('Submission successful');
-                            window.location.href='subsuccess.php?remainingTime=$remainingTime';
+                            window.location.href='subsuccess.php';
                         </script>";
                 }
             }
@@ -334,19 +334,3 @@ if (isset($_POST['submit'])) {
    // Call updateTimer to start the countdown
    updateTimer();
 </script>
-
-
-
-
-   </body>
-
-
-<!-- Mirrored from thememinister.com/crm/add-customer.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 27 Aug 2019 13:28:08 GMT -->
-</html>
-
-
-
-
-
-
-
