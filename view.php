@@ -136,81 +136,75 @@ $bissy = mysqli_query($conn, "SELECT * FROM euploads where courseid ='$ccode2' O
 
                            <!-- ./Plugin content:powerpoint,txt,pdf,png,word,xl -->
                            <div class="table-responsive">
-                              <table id="dataTableExample1" class="table table-bordered table-striped table-hover">
-                                 <thead>
-                                    <tr class="info">
-                                       <th>S/N</th>
-                                       <th>FULLNAME</th>
-                                       <th>MATRIC NO</th>
-                                       <th>COURSE ID </th>
-                                       <th>TIME OF SUBMISSION</th>
-                                       <th>DOWNLOAD</th>
-                                       <th>STATUS</th>
-                                    </tr>
-                                 </thead>
-                                 <tbody>
-                                    <?php $count = 1;
-                                    while ($row = mysqli_fetch_assoc($bissy)) {
-                                       $candid = $row['id'];
-                                       $fulln = $row['fulln'];
-                                       $matricno = $row['matno'];
-                                       $courseid=$row['courseid'];
-                                       $examsheet = $row['filelink'];
-                                       $statuz = $row['statuz'];
-                                       $dreg = $row['dreg'];
-                                       //$fileURL1 = "http://yourdomain.com/docs/".$examsheet;
-                                       $fileURL1 = "docs/".$examsheet;
+    <table id="dataTableExample1" class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr class="info">
+                <th>S/N</th>
+                <th>FULLNAME</th>
+                <th>MATRIC NO</th>
+                <th>COURSE ID</th>
+                <th>TIME OF SUBMISSION</th>
+                <th>DOWNLOAD</th>
+                <th>STATUS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $count = 1;
+            while ($row = mysqli_fetch_assoc($bissy)) {
+                $candid = $row['id'];
+                $fulln = $row['fulln'];
+                $matricno = $row['matno'];
+                $courseid = $row['courseid'];
+                $examsheet = $row['filelink'];
+                $statuz = $row['statuz'];
+                $dreg = $row['dreg'];
+                $fileURL1 = "docs/" . $examsheet;
 
-                                        // Generate unique IDs for each row
-                                       $downloadLinkId = "downloadLink" . $count;
-                                    ?>
-                                    <tr>
-                                       <th><?php echo $count;?></th>
-                                       <th><?php echo $fulln;?></th>
-                                       <th><?php echo $matricno;?></th>
-                                       <th><?php echo $courseid; ?></th>  
-                                        <th><?php echo $dreg; ?></th>
-                                        <th>
-                            <a href="<?php echo $fileURL1; ?>" class="btn btn-primary downloadLink" data-candid="<?php echo $candid; ?>"
-                             download>Download</a></th>
-                                        <th>
-                                        <?php
-                                          if ($statuz == 0) {
-                                          $button = "NOT-PRINTED";
-                                           $bname = "unprinted";
-                                            $bcolour = "danger";
-                                            $pstate = 0;
-                                            } else {
-                                         $button = "PRINTED";
-                                          $bname = "printed";
-                                          $bcolour = "success";
-                                         $pstate = 1;
-                                          }
-        
-                                         ?>
-                                 <button type="button" class="btn btn-<?php echo $bcolour; ?>"><?php echo $button; ?></button></th>
-                                    </tr>
-                                   <?php $count++;} ?>
-                                 </tbody>
-                              </table>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </section>           
-            <script>
-       function downloadZip() {
-    // Get table data
+                // Generate unique IDs for each row
+                $downloadLinkId = "downloadLink" . $count;
+            ?>
+            <tr>
+                <td><?php echo $count; ?></td>
+                <td><?php echo $fulln; ?></td>
+                <td><?php echo $matricno; ?></td>
+                <td><?php echo $courseid; ?></td>
+                <td><?php echo $dreg; ?></td>
+                <td>
+                    <button class="btn btn-primary downloadLink" data-candid="<?php echo $candid; ?>" data-file="<?php echo $fileURL1; ?>">Download</button>
+                </td>
+                <td>
+                    <?php
+                    if ($statuz == 0) {
+                        $button = "NOT-PRINTED";
+                        $bname = "unprinted";
+                        $bcolour = "danger";
+                        $pstate = 0;
+                    } else {
+                        $button = "PRINTED";
+                        $bname = "printed";
+                        $bcolour = "success";
+                        $pstate = 1;
+                    }
+                    ?>
+                    <button type="button" class="btn btn-<?php echo $bcolour; ?>"><?php echo $button; ?></button>
+                </td>
+            </tr>
+            <?php $count++; } ?>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+<script>
+function downloadZip() {
     var table = document.getElementById('dataTableExample1');
-
-    // Check if the table exists
     if (!table) {
         alert("Table not found.");
         return;
     }
 
-    // Check if the table has any rows (excluding the header row)
     var rowCount = table.rows.length;
     var headerRowCount = table.tHead.rows.length;
     var dataRowCount = rowCount - headerRowCount;
@@ -220,11 +214,7 @@ $bissy = mysqli_query($conn, "SELECT * FROM euploads where courseid ='$ccode2' O
         return;
     }
 
-    // Proceed with generating the Excel file
-    // Specify the column indices you want to include
-    var includedColumns = [0, 1, 2, 3, 4]; // Adjust the column indices as needed
-
-    // Create a sheet with only the specified columns
+    var includedColumns = [0, 1, 2, 3, 4];
     var sheetData = [];
     for (var i = headerRowCount; i < rowCount; i++) {
         var rowData = [];
@@ -234,70 +224,46 @@ $bissy = mysqli_query($conn, "SELECT * FROM euploads where courseid ='$ccode2' O
         sheetData.push(rowData);
     }
 
-    // Create a workbook
     var wb = XLSX.utils.book_new();
     var sheet = XLSX.utils.aoa_to_sheet(sheetData);
     XLSX.utils.book_append_sheet(wb, sheet, 'Sheet1');
-
-    // Save the workbook to a file
     XLSX.writeFile(wb, 'studentlist.xlsx');
 }
 
-</script>
-
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
 $(document).ready(function() {
     $('.downloadLink').on('click', function(e) {
-        e.preventDefault(); // Prevent the default download behavior
-
-        // Get the candidate ID from the data attribute
+        e.preventDefault();
+        
         var candid = $(this).data('candid');
+        var downloadLink = $(this).data('file');
 
-        // Store the download link in a variable
-        var downloadLink = $(this).attr('href');
-
-        // Attempt to download the file
         $.ajax({
-            url: downloadLink, // Use the download link directly
-            method: 'GET',
-            success: function(data) {
-                // If the download is successful, update the database using AJAX
-                $.ajax({
-                    url: 'updateStatus.php',
-                    method: 'POST',
-                    data: { candid: candid },
-                    success: function(response) {
-                        // If the update is successful, trigger the download
-                        window.location.href = downloadLink;
-                        
-                        // Alert messages
-                        alert("File downloaded successfully and Print status changed!");
+            url: 'updateStatus.php',
+            method: 'POST',
+            data: { candid: candid },
+            success: function(response) {
+                var link = document.createElement('a');
+                link.href = downloadLink;
+                link.download = downloadLink.split('/').pop();
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
 
-                        // Refresh the page after a short delay (adjust the delay as needed)
-                        setTimeout(function() {
-                            location.reload();
-                        }, 1000); // 1000 milliseconds = 1 second
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error updating print status:", error);
-                        alert("Error updating print status. Check the console for details.");
-                    }
-                });
+                alert("File downloaded successfully and print status changed!");
+
+                setTimeout(function() {
+                    location.reload();
+                }, 1000);
             },
             error: function(xhr, status, error) {
-                // If the download fails, show an error message
-                console.error("Error downloading file:", error);
-                alert("Error downloading file. Check the console for details.");
+                console.error("Error updating print status:", error);
+                alert("Error updating print status. Check the console for details.");
             }
         });
     });
 });
 </script>
-
-
-            <!-- /.content -->
+</section>
          </div>
          <!-- /.content-wrapper -->
          <footer class="main-footer">

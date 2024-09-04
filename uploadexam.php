@@ -3,8 +3,6 @@
 require_once("conn.php");
 require_once("pop.php");
 
-
-
 if (isset($_POST['submit'])) {
     $targetDir = "docs/";
     $fileName = basename($_FILES["filelink"]["name"]);
@@ -13,10 +11,10 @@ if (isset($_POST['submit'])) {
     $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
 
     if (isset($_POST["submit"]) && !empty($_FILES["filelink"]["name"])) {
-        if ($_FILES["filelink"]["size"] > 90000) {
+        if ($_FILES["filelink"]["size"] > 150000) {
             echo "<script type='text/javascript'>
-                alert('Sorry, your file is too large, it should be less than 90kb.');
-         
+                alert('Sorry, your file is too large, it should be less than 120kb.');
+                  window.location.href='uploadexam.php';
                 </script>";
         } else {
             // Allow certain file formats
@@ -212,34 +210,41 @@ if (isset($_POST['submit'])) {
 
                            </form>
 
-                            <div class="table-responsive">
-                              <table id="dataTableExample1" class="table table-bordered table-striped table-hover">
-                                 <thead>
-                                    <tr class="info">
-                                       <th>S/N</th>
-                                       <th>ACTION</th>
-                                       <th>DATE</th>
-                                       
-                                    </tr>
-                                 </thead>
-                                 <tbody>
+                   <div class="table-responsive">
+               <table id="dataTableExample1" class="table table-bordered table-striped table-hover">
+               <thead>
+              <tr class="info">
+                <th>S/N</th>
+                <th>FILE NAME</th>
+                <th>DATE</th>
+                <th>ACTION</th> <!-- Added column for action -->
+            </tr>
+        </thead>
+        <tbody>
             <?php 
-            $bisola = mysqli_query($conn, "SELECT * FROM euploads where fulln='$sefullnn'");                         
-             $count = 1;
-                                    while ($row = mysqli_fetch_assoc($bisola)) {
-                                       $id = $row['id'];
-                                       $dreg = $row['dreg'];
-                                       $fileName=$row['filelink'];
-                                    ?>
-                                       
-                                    <tr>
-                                       <td><?php echo $count;?></td>
-                                       <td><?php echo $fileName;?></td>
-                                       <td><?php echo $dreg;?></td>
-                                    </tr>
-                                    <?php $count++;} ?> 
-                                 </tbody>
-                              </table>       
+            $bisola = mysqli_query($conn, "SELECT * FROM euploads WHERE fulln='$sefullnn'");                         
+            $count = 1;
+            while ($row = mysqli_fetch_assoc($bisola)) {
+                $id = $row['id'];
+                $dreg = $row['dreg'];
+                $fileName = $row['filelink'];
+            ?>
+            <tr>
+                <td><?php echo $count; ?></td>
+                <td><?php echo $fileName; ?></td>
+                <td><?php echo $dreg; ?></td>
+                <td>
+                    <!-- Delete form -->
+                    <form action="deleteRecord.php" method="POST" style="display:inline;">
+                        <input type="hidden" name="id" value="<?php echo $id; ?>">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            <?php $count++; } ?>
+        </tbody>
+    </table>
+</div>
                            </div>
                         </div>
                      </div>
@@ -250,6 +255,39 @@ if (isset($_POST['submit'])) {
             </section>
             <!-- /.content -->
          </div>
+
+
+         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.delete-btn').on('click', function() {
+        var button = $(this);
+        var id = button.data('id');
+
+        if (confirm('Are you sure you want to delete this record?')) {
+            $.ajax({
+                url: 'deleteRecord.php',
+                type: 'POST',
+                data: { id: id },
+                success: function(response) {
+                    // Check response if needed
+                    if (response == 'success') {
+                        button.closest('tr').remove(); // Remove the row from the table
+                        alert('Record deleted successfully.');
+                    } else {
+                        alert('Failed to delete record.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error deleting record:", error);
+                    alert("Error deleting record. Check the console for details.");
+                }
+            });
+        }
+    });
+});
+</script>
+
 
  
          <!-- /.content-wrapper -->
